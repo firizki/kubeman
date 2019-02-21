@@ -1,0 +1,19 @@
+#! /bin/bash
+
+if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
+  kubectl "$@"
+  export kubes=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
+
+  if [ -n "${kubes[1]}" ]; then
+    if [ "${kubes[0]}" != "${kubes[1]}" ]; then
+      export found=$(ls ~/.kube/ | grep kubectl-"${kubes[1]}")
+      if [ -z "$found" ]; then
+        echo "Downloading kubectl-${kubes[1]}"
+        curl -L https://storage.googleapis.com/kubernetes-release/release/v"${kubes[1]}"/bin/linux/amd64/kubectl -o ~/.kube/kubectl-"${kubes[1]}"
+      fi
+      cp ~/.kube/kubectl-"${kubes[1]}" /usr/local/bin/kubectl
+    fi
+  fi
+else
+  kubectl "$@"
+fi
