@@ -4,6 +4,8 @@ Kubeman stand for Kubectl Manager. Kubeman will execute every command like `kube
 ## Requirement
 - You must already install `kubectl` binary
 - Make sure you have `~/.kube/` directory
+- Currently it's only support Linux base, you can change this by change the link with [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+  
 
 ## Installation
 1. Set kubeman as execute file
