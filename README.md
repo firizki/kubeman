@@ -2,7 +2,7 @@
 Kubeman stand for Kubectl Manager. Kubeman will execute every command like `kubectl` do, but Kubeman will change `kubectl` binary if it's detect different version between client and server.
 
 ## Requirement
-- You must already install `kubectl` binary
+- You must already install `kubectl` binary that possible to change config context
 - Make sure you have `~/.kube/` directory
 - Currently it's only support Linux base, you can change this by change the link with [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
   
