@@ -1,7 +1,8 @@
 #! /bin/bash
 
+kubectl "$@"
+
 if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
-  kubectl "$@"
   export kubes=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
 
   if [ -n "${kubes[1]}" ]; then
@@ -14,6 +15,4 @@ if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
       cp ~/.kube/kubectl-"${kubes[1]}" /usr/local/bin/kubectl
     fi
   fi
-else
-  kubectl "$@"
 fi
