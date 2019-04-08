@@ -3,16 +3,17 @@
 kubectl "$@"
 
 if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
-  export kubes=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
+  export client=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
 
-  if [ -n "${kubes[1]}" ]; then
-    if [ "${kubes[0]}" != "${kubes[1]}" ]; then
-      export found=$(ls ~/.kube/ | grep kubectl-"${kubes[1]}")
+  if [ -n "${client[1]}" ]; then
+    server=($(echo ${client[1]} | tr "-" "\n"))
+    if [ "$client" != "$server" ]; then
+      export found=$(ls ~/.kube/ | grep kubectl-"$server")
       if [ -z "$found" ]; then
-        echo "Downloading kubectl-${kubes[1]}"
-        curl -L https://storage.googleapis.com/kubernetes-release/release/v"${kubes[1]}"/bin/linux/amd64/kubectl -o ~/.kube/kubectl-"${kubes[1]}"
+        echo "Downloading kubectl-$server"
+        curl -L https://storage.googleapis.com/kubernetes-release/release/v"$server"/bin/linux/amd64/kubectl -o ~/.kube/kubectl-"$server"
       fi
-      cp ~/.kube/kubectl-"${kubes[1]}" /usr/local/bin/kubectl
+      cp ~/.kube/kubectl-"$server" /usr/local/bin/kubectl
     fi
   fi
 fi
