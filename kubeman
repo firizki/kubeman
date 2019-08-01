@@ -3,7 +3,7 @@
 kubectl "$@"
 
 if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
-  export client=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
+  export client=($(kubectl version | grep -Eo "GitVersion:\"v([0-9.]+)\"" | sed -E 's/GitVersion:"v([0-9.]+)"/\1/'))
 
   if [ -n "${client[1]}" ]; then
     server=($(echo ${client[1]} | tr "-" "\n"))
