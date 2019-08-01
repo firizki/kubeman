@@ -2,17 +2,18 @@
 
 kubectl "$@"
 
-# detect OS
-if [[ "$OSTYPE" =~ ^(darwin) ]]; then
-  os="darwin"
-elif [[ "$OSTYPE" = "linux-gnu" ]]; then
-  os="linux"
-else
-  echo "os type unsupported"
-  exit 1
-fi
-
 if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
+
+  # detect OS
+  if [[ "$OSTYPE" =~ ^(darwin) ]]; then
+    os="darwin"
+  elif [[ "$OSTYPE" = "linux-gnu" ]]; then
+    os="linux"
+  else
+    echo "os type unsupported"
+    exit 1
+  fi
+  
   export client=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
 
   if [ -n "${client[1]}" ]; then
