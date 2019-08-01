@@ -2,6 +2,16 @@
 
 kubectl "$@"
 
+# detect OS
+if [[ "$OSTYPE" =~ ^(darwin) ]]; then
+  os="darwin"
+elif [[ "$OSTYPE" = "linux-gnu" ]]; then
+  os="linux"
+else
+  echo "os type unsupported"
+  exit 1
+fi
+
 if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
   export client=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
 
@@ -11,7 +21,7 @@ if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
       export found=$(ls ~/.kube/ | grep kubectl-"$server")
       if [ -z "$found" ]; then
         echo "Downloading kubectl-$server"
-        curl -L https://storage.googleapis.com/kubernetes-release/release/v"$server"/bin/linux/amd64/kubectl -o ~/.kube/kubectl-"$server"
+        curl -L https://storage.googleapis.com/kubernetes-release/release/v"$server"/bin/"$os"/amd64/kubectl -o ~/.kube/kubectl-"$server"
       fi
       cp ~/.kube/kubectl-"$server" /usr/local/bin/kubectl
     fi
