@@ -14,7 +14,7 @@ if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
     exit 1
   fi
   
-  export client=($(kubectl version | grep -oP "(?<=GitVersion:\"v)(.*)(?=\", GitCommit)"))
+  export client=($(kubectl version | grep -Eo "GitVersion:\"v([0-9.]+)\"" | sed -E 's/GitVersion:"v([0-9.]+)"/\1/'))
 
   if [ -n "${client[1]}" ]; then
     server=($(echo ${client[1]} | tr "-" "\n"))
@@ -24,7 +24,7 @@ if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
         echo "Downloading kubectl-$server"
         curl -L https://storage.googleapis.com/kubernetes-release/release/v"$server"/bin/"$os"/amd64/kubectl -o ~/.kube/kubectl-"$server"
       fi
-      cp ~/.kube/kubectl-"$server" /usr/local/bin/kubectl
+      sudo cp ~/.kube/kubectl-"$server" /usr/local/bin/kubectl
     fi
   fi
 fi
