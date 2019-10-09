@@ -3,8 +3,7 @@
 kubectl "$@"
 
 if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
-
-  # detect OS
+  # Detect OS type
   if [[ "$OSTYPE" =~ ^(darwin) ]]; then
     os="darwin"
   elif [[ "$OSTYPE" = "linux-gnu" ]]; then
@@ -13,9 +12,11 @@ if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
     echo "os type unsupported"
     exit 1
   fi
-  
+
+  # Get client & server kube version
   export client=($(kubectl version | grep -Eo "GitVersion:\"v([0-9.]+)\"" | sed -E 's/GitVersion:"v([0-9.]+)"/\1/'))
 
+  # Compare version and search for the binary
   if [ -n "${client[1]}" ]; then
     server=($(echo ${client[1]} | tr "-" "\n"))
     if [ "$client" != "$server" ]; then
