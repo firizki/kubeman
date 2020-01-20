@@ -14,7 +14,7 @@ if [ "$1" == "config" ] && [ "$2" == "use-context" ]; then
   fi
 
   # Get client & server kube version
-  export client=($(kubectl version | grep -Eo "GitVersion:\"v([0-9.]+)\"" | sed -E 's/GitVersion:"v([0-9.]+)"/\1/'))
+  export client=($(kubectl version | grep -Eo "GitVersion:\"v([0-9.]+)" | sed -E 's/GitVersion:"v([0-9.]+)/\1/'))
 
   # Compare version and search for the binary
   if [ -n "${client[1]}" ]; then
